@@ -1,26 +1,212 @@
+   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Amostras do guia Ritmo */
+  --color-text: #f4f4f5;
+  --color-text-muted: #a1a1aa;
+  --color-text-placeholder: #71717a;
+  --color-text-disabled: #52525b;
+  --color-on-primary: #09090b;
+
+  --color-bg: #09090b;
+  --color-zinc-925: #0f0f12;
+  --color-zinc-850: #1f1f23;
+  --color-surface: var(--color-zinc-925);
+  --color-fill-1: #18181b;
+  --color-fill-2: var(--color-zinc-850);
+  --color-overlay: rgb(0 0 0 / 60%);
+
+  --color-border: #27272a;
+  --color-border-hover: #3f3f46;
+  --color-divider: #18181b;
+  --color-tint-hover-soft: rgb(255 255 255 / 4%);
+  --color-tint-selected: rgb(255 255 255 / 8%);
+  --color-tint-pressed: rgb(255 255 255 / 12%);
+
+  --color-primary: #a3e635;
+  --color-primary-hover: #bef264;
+  --color-primary-pressed: #84cc16;
+  --color-primary-soft: rgb(163 230 53 / 12%);
+  --color-primary-text: #bef264;
+  --color-focus: #bef264;
+  --color-danger: #f87171;
+  --color-danger-bg: #2a1011;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --text-display: 1.75rem;
+  --text-display--line-height: 2.25rem;
+  --text-display--font-weight: 600;
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.75rem;
+  --text-title--font-weight: 600;
+  --text-title-sm: 1.125rem;
+  --text-title-sm--line-height: 1.5rem;
+  --text-title-sm--font-weight: 500;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5rem;
+  --text-body--font-weight: 400;
+  --text-body-strong: 1rem;
+  --text-body-strong--line-height: 1.5rem;
+  --text-body-strong--font-weight: 500;
+  --text-small: .875rem;
+  --text-small--line-height: 1.25rem;
+  --text-small--font-weight: 400;
+  --text-small-strong: .875rem;
+  --text-small-strong--line-height: 1.25rem;
+  --text-small-strong--font-weight: 500;
+  --text-caption: .75rem;
+  --text-caption--line-height: 1rem;
+  --text-caption--font-weight: 400;
+
+  --spacing: .25rem;
+  --container-ritmo: 30rem;
+  --container-drawer: 25rem;
+  --radius-sm: .375rem;
+  --radius-md: .75rem;
+  --radius-xl: 1rem;
+  /* Receitas de sombra para drawer, bottom sheet e toast. */
+  --shadow: 0 8px 24px rgb(0 0 0 / 30%);
+  --shadow-strong: 0 16px 48px rgb(0 0 0 / 50%);
+  --ease-ritmo: cubic-bezier(.2, 0, 0, 1);
+  --default-transition-timing-function: cubic-bezier(.2, 0, 0, 1);
+  --default-transition-duration: 150ms;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  :root { color-scheme: dark; }
+  body { @apply bg-bg font-sans text-text text-body; }
+  :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+  ::placeholder { color: var(--color-text-placeholder); opacity: 1; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0s !important;
+      transition-duration: 0s !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  
+  input:is([type="text"], [type="email"], [type="password"]) {
+    @apply min-h-10 w-full rounded-md border border-border bg-surface px-3 py-2 text-body text-text transition-colors;
+  }
+
+  input:is([type="text"], [type="email"], [type="password"]):enabled:hover {
+    @apply border-border-hover;
+  }
+
+  input:is([type="text"], [type="email"], [type="password"])[aria-invalid="true"] {
+    @apply border-danger;
+  }
+
+  label {
+    @apply text-small-strong;
+  }
+  
+  input[type="password"]::-ms-reveal {
+    display: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility duration-quick { transition-duration: 150ms; }
+@utility duration-fast { transition-duration: 250ms; }
+@utility duration-medium { transition-duration: 350ms; }
+
+
+@layer components {
+
+  .ritmo-content {
+    @apply mx-auto w-full px-5 sm:max-w-ritmo sm:px-0 sm:pt-10 ;
+  }
+
+  .ritmo-primary,
+  .ritmo-secondary,
+  .ritmo-outlined,
+  .ritmo-ghost {
+    @apply rounded-md transition-colors;
+  }
+
+  :is(.ritmo-primary, .ritmo-secondary, .ritmo-outlined, .ritmo-ghost ):is(button, a) {
+    @apply min-h-10 px-4 py-2 text-small-strong flex justify-center items-center gap-2;
+  }
+
+  .ritmo-primary { @apply bg-primary text-on-primary; }
+  .ritmo-secondary { @apply bg-fill-1 text-text; }
+  .ritmo-outlined { @apply border border-border bg-surface text-text; }
+  .ritmo-ghost { @apply bg-transparent text-text; }
+
+  :is(.ritmo-primary, .ritmo-secondary, .ritmo-outlined, .ritmo-ghost):is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
+    @apply cursor-not-allowed text-text-disabled;
+  }
+
+  .ritmo-primary:is(:disabled, [aria-disabled="true"]):not([aria-busy="true"]) {
+    @apply bg-fill-2;
+  }
+
+  .ritmo-outlined:is([aria-selected="true"], [aria-pressed="true"], [aria-checked="true"]) {
+    @apply border-primary bg-primary-soft;
+  }
+
+  .ritmo-ghost:is([aria-selected="true"], [aria-pressed="true"], [aria-checked="true"]) {
+    @apply bg-tint-selected;
+  }
+
+  @media (hover: hover) {
+    .ritmo-primary:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):hover {
+      @apply bg-primary-hover;
+    }
+
+    .ritmo-secondary:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):hover {
+      background-image: linear-gradient(var(--color-tint-hover-soft), var(--color-tint-hover-soft));
+    }
+
+    .ritmo-outlined:not(:disabled, [aria-disabled="true"], [aria-busy="true"], [aria-selected="true"], [aria-pressed="true"], [aria-checked="true"], [aria-invalid="true"]):hover {
+      @apply border-border-hover;
+    }
+
+    .ritmo-ghost:not(:disabled, [aria-disabled="true"], [aria-busy="true"], [aria-selected="true"], [aria-pressed="true"], [aria-checked="true"]):hover {
+      @apply bg-tint-hover-soft;
+    }
+  }
+
+  .ritmo-primary:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):active {
+    @apply bg-primary-pressed;
+  }
+
+  :is(.ritmo-secondary, .ritmo-outlined):not(:disabled, [aria-disabled="true"], [aria-busy="true"]):active {
+    background-image: linear-gradient(var(--color-tint-pressed), var(--color-tint-pressed));
+  }
+
+  .ritmo-ghost:not(:disabled, [aria-disabled="true"], [aria-busy="true"]):active {
+    @apply bg-tint-pressed;
+  }
+
+  .ritmo-outlined[aria-invalid="true"] { @apply border-danger; }
+
+  .ritmo-loading {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .ritmo-loading > span { grid-area: 1 / 1; }
+  .ritmo-loading > [data-loading-label] { display: none; }
+  .ritmo-loading[aria-busy="true"] > [data-loading-label] {
+    display: block;
+    position: absolute;
+    inset-inline: .5rem;
+    top: 50%;
+    translate: 0 -50%;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .ritmo-loading[aria-busy="true"] > [data-idle-label] { visibility: hidden; }
+
+  .ritmo-icon { @apply size-4 shrink-0; stroke-width: 1.5; }
+  .ritmo-icon-button { @apply size-5 shrink-0; stroke-width: 1.5; }
+
+  .input-label{ @apply flex flex-col gap-2}
+  
 }
